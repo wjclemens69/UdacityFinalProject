@@ -4,7 +4,11 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 
-import {UpdateItem} from '../dataAccess/toDoData'
+
+
+//import {UpdateItem} from '../dataAccess/toDoData'
+import {requestToDoUpdate} from '../dataRequest/toDoDataRequest'
+
 
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -16,16 +20,22 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
     
-    const cupdatedTodo = await UpdateItem(updatedTodo, todoId, userId)
-    return {
-        statusCode: 201,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': true
-        }, body: JSON.stringify({ item: { cupdatedTodo } })
+    //const cupdatedTodo = await UpdateItem(updatedTodo, todoId, userId)
 
-    }
+    const cupdatedTodo = await requestToDoUpdate(updatedTodo, todoId, userId)
+
+    return cupdatedTodo
+    
+
+    // return {
+    //     statusCode: 201,
+    //     headers: {
+    //         'Access-Control-Allow-Origin': '*',
+    //         'Content-Type': 'application/json',
+    //         'Access-Control-Allow-Credentials': true
+    //     }, body: JSON.stringify({ item: { cupdatedTodo } })
+
+    // }
 
 
 

@@ -3,7 +3,10 @@ import 'source-map-support/register'
 //import * as AWS from 'aws-sdk'
 import { getUserId } from '../utils'
 
-import {gettoDosbyUser} from '../dataAccess/toDoData'
+
+import  {requesttoDosbyUser} from '../dataRequest/toDoDataRequest'
+
+//import {gettoDosbyUser} from '../dataAccess/toDoData'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
 const todotablename = process.env.TODOS_TABLE
@@ -14,21 +17,24 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     const userId = getUserId(event)
     logger.info("getting items from table ", todotablename, " for ", userId)
-    const rresult = await gettoDosbyUser(userId)
+//    const rresult = await gettoDosbyUser(userId)
+     const rresult = await requesttoDosbyUser(userId)
+
+     return rresult
 
 
-    logger.info("retrieved items from " + todotablename + " for user " + userId)
-    const items = rresult.Items
-    return {
-        statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': true
-        },
-        body: JSON.stringify({ items})
+    // logger.info("retrieved items from " + todotablename + " for user " + userId)
+    // const items = rresult.Items
+    // return {
+    //     statusCode: 200,
+    //     headers: {
+    //         'Access-Control-Allow-Origin': '*',
+    //         'Content-Type': 'application/json',
+    //         'Access-Control-Allow-Credentials': true
+    //     },
+    //     body: JSON.stringify({ items})
 
-    }
+    // }
 
 }
 
